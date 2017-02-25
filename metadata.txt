@@ -1,0 +1,37 @@
+# This file contains metadata for your plugin. Since
+# version 2.0 of QGIS this is the proper way to supply
+# information about a plugin. The old method of
+# embedding metadata in __init__.py will
+# is no longer supported since version 2.0.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=Data Manager
+qgisMinimumVersion=2.0
+version=0.1
+author=George Ioannou / Cartologic (gmioannou@cartologic.com)
+email=gmioannou@cartologic.com
+description=Detects PostGIS database foreign key constraints for Layers/Tables to construct Joins and Relates in QGIS project. Additionally, it utilizes joins to compose Value Maps for the referenced fields, like Subtypes and Domains.
+about=Developed by George Ioannou / Cartologic for the Kuwait Institute for Scientific Research (KISR)
+
+tracker=https://www.github.com/cartologic/qgis-datamanager-plugin
+repository=https://www.github.com/cartologic/qgis-datamanager-plugin
+# End of mandatory metadata
+
+# Recommended items:
+
+# Uncomment the following line and add your changelog:
+changelog=0.1
+
+# Tags are comma separated with spaces allowed
+tags=database, postgis, layer, table, relation, join, foreign key constraints
+
+homepage=https://www.github.com/cartologic/data_manager
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
