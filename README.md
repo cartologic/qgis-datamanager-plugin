@@ -6,7 +6,7 @@ It detects the foreign key constraints for layers and tables within PostgreSQL/P
 
 ## Installation
 
-Download or clone the plugin and copy the plugin’s folder named _DataManager_ in the following location and restart QGIS.
+Download or clone the plugin, rename the plugin’s folder to _DataManager_ and copy in the following location, then restart QGIS.
 
 ```
 $HOME/.qgis2/python/plugins/
