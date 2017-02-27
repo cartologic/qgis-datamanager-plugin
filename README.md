@@ -2,14 +2,11 @@
 
 ## Introduction
 
-The data manager plugin will provide the tools necessary to establish an environment to work with attribute domains in PostGIS/QGIS.
-What is different is that the attribute domains are defined and maintained in the PostGIS database instead of the QGIS project.
+This plugin provides a full field domain experience for PostGIS/QGIS.  
 
-- It detects the foreign key constraints for layers and tables within the database.
-- It constructs joins and relates from the constraints in QGIS project.
-- It utilizes the joins to:
-  - Change the _Edit widget_ of the referenced fields from _Text Edit_ to _Value Maps_  
-  - To compose the list of valid domain values.
+What is different is that the attribute domains are defined and maintained in the PostGIS database instead of the QGIS project. Once the plugin is installed and configured then adding data using the plugin will create the necessary joins and relates within the QGIS project. The plugin will automatically define for each layer:
+  - Coded value domains (will be loaded as layer joins and list of values)
+  - One to many relations (will be loaded as project relations)
 
 ## Installation
 
@@ -20,11 +17,14 @@ What is different is that the attribute domains are defined and maintained in th
 
 From QGIS click the _Plugins_ pull down menu and navigate to the _Manage and Install Plugins_. Search for the _Data Manager_ plugin and activate it using the checkbox.
 
-### Tips:
-1. To setup this tool to work properly the database administrator needs to:
- - Define the necessary indexes and constraints describing the relationships between layers and lookup tables in the database, using sql either from psql or pgadmin.
- - Modify information schema views. Run this script [Information Schema Views.sql](https://github.com/cartologic/qgis-datamanager-plugin/tree/master/core/sql/iinformation_schema_views.sql) directly in the database from psql/pgadmin or connect once as supper user (database owner) from the plugin.
-2. Users migrating their data from ESRI file geodatabase using [fgdb2postgis]( https://pypi.python.org/pypi/fgdb2postgis) will have all the indexes, constraints and information schema views defined by default.
+### Configuration:
+
+1. Direct loading of data to PostGIS
+  - To setup this tool to work properly the database administrator needs to:
+    - Define the necessary indexes and constraints describing the relationships between layers and lookup tables in the database, using sql either from psql or pgadmin.
+    - Modify information schema views. Run this script [Information Schema Views.sql](https://github.com/cartologic/qgis-datamanager-plugin/blob/master/core/sql/information_schema_views.sql) directly in the database from psql/pgadmin, alternatively connect the first time as supper user (database owner) from the plugin.
+2. Loading of data from ESRI file geodatabase
+  - Users migrating their data from ESRI file geodatabase using [fgdb2postgis]( https://pypi.python.org/pypi/fgdb2postgis) will have all the indexes, constraints and information schema views defined by default.
 
 ## Usage
 
@@ -40,6 +40,14 @@ _Relates_ are offering the presentation of the one-to-many relationship among la
 
 ## Note
 It is highly recommended to use this plugin in combination with [fgdb2postgis]( https://pypi.python.org/pypi/fgdb2postgis) python package, because both software resulted from the same project and thus there are well tested on working together.
+
+## Advanced
+
+- The plugin detects the constraints for layers and tables within the database.
+- The plugin constructs joins and relates using this information in the QGIS project.
+- It utilizes the joins to:
+  - Change the _Edit widget_ of the referenced fields from _Text Edit_ to _Value Maps_  
+  - To compose the list of valid domain values.
 
 ## License
 GNU Public License (GPL) Version 3
