@@ -20,6 +20,7 @@
  *																		   *
  ***************************************************************************/
 """
+import os
 import psycopg2
 from qgis.core import QgsMessageLog
 
@@ -48,10 +49,38 @@ class Pgdb:
 
 		try:
 			self.dbcon = psycopg2.connect(conn_string)
-			QgsMessageLog.logMessage('Connected to database ' + self.database, 'Data Manager')
+			QgsMessageLog.logMessage('Connect to database ' + self.database, 'Data Manager')
 		except:
 			print "Unable to connect to database"
 			exit(1)
+
+	def check_extension(self):
+		"""Check if extension of information schema views is initialized"""
+		try:
+			cur = self.dbcon.cursor()
+			cur.execute("SELECT COUNT(*) FROM pg_class WHERE relname='foreign_key_constraints_vw'")
+			view_count = cur.fetchone()[0]
+			cur.close()
+			return (view_count == 1)
+		except:
+			return False
+
+	def init_extension(self):
+		"""Initialize extension of information schema views. Must be connected as superuser"""
+		dir_path = os.path.dirname(os.path.realpath(__file__))
+		sql_file = os.path.join(dir_path, "sql\information_schema_views.sql")
+
+		if os.path.exists(sql_file):
+			QgsMessageLog.logMessage("Initializing extension", 'Data Manager')
+			cur = self.dbcon.cursor()
+			with open(sql_file, "r") as sql:
+				code = sql.read()
+				cur.execute(code)
+				self.dbcon.commit()
+			cur.close()
+		else:
+			QgsMessageLog.logMessage("SQL file " + sql_file + " is missing...", 'Data Manager')
+			QgsMessageLog.logMessage("Please reinstall the plugin!", 'Data Manager')
 
 	def init_schemata(self):
 		"""Init the database schemata and update its own propery list"""
@@ -90,7 +119,6 @@ class Pgdb:
 
 		cur.execute(sql_string)
 		layers = cur.fetchall()
-
 		cur.close()
 
 		return(layers)
@@ -106,7 +134,6 @@ class Pgdb:
 
 		cur.execute(sql_joins)
 		rows = cur.fetchall()
-
 		cur.close()
 
 		return(rows)
@@ -122,7 +149,6 @@ class Pgdb:
 
 		cur.execute(sql_relations)
 		rows = cur.fetchall()
-
 		cur.close()
 
 		return(rows)
