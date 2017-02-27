@@ -20,9 +20,8 @@ From QGIS click the _Plugins_ pull down menu and navigate to the _Manage and Ins
 ### Configuration:
 
 1. Direct loading of data to PostGIS
-  - To setup this tool to work properly the database administrator needs to:
-    - Define the necessary indexes and constraints describing the relationships between layers and lookup tables in the database, using sql either from psql or pgadmin.
-    - Modify information schema views. Run this script [Information Schema Views.sql](https://github.com/cartologic/qgis-datamanager-plugin/blob/master/core/sql/information_schema_views.sql) directly in the database from psql/pgadmin, alternatively connect the first time as supper user (database owner) from the plugin.
+  - Define the necessary indexes and constraints describing the relationships between layers and lookup tables in the database, using sql either from psql or pgadmin.
+  - Modify information schema views. Run this script [Information Schema Views.sql](https://github.com/cartologic/qgis-datamanager-plugin/blob/master/core/sql/information_schema_views.sql) directly in the database from psql/pgadmin, alternatively connect the first time as supper user (database owner) from the plugin and the information schema views will be updated automatically.
 2. Loading of data from ESRI file geodatabase
   - Users migrating their data from ESRI file geodatabase using [fgdb2postgis]( https://pypi.python.org/pypi/fgdb2postgis) will have all the indexes, constraints and information schema views defined by default.
 
