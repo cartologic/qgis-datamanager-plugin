@@ -376,8 +376,8 @@ class DataManager:
 		for feat in features:
 			values = feat.attributes()
 
-			code = str(values[1])
-			desc = str(values[2])
+			code = unicode(values[1])
+			desc = unicode(values[2])
 
 			# qgis expects them to be in this order
 			vmap_dict.update({desc: code})
