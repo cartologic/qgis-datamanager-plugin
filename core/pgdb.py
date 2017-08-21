@@ -68,7 +68,7 @@ class Pgdb:
 	def init_extension(self):
 		"""Initialize extension of information schema views. Must be connected as superuser"""
 		dir_path = os.path.dirname(os.path.realpath(__file__))
-		sql_file = os.path.join(dir_path, "sql\information_schema_views.sql")
+		sql_file = os.path.join(dir_path, "sql/information_schema_views.sql")
 
 		if os.path.exists(sql_file):
 			QgsMessageLog.logMessage("Initializing extension", 'Data Manager')

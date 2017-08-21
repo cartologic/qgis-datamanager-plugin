@@ -57,7 +57,7 @@
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
-        <string>Kiein View</string>
+        <string>Data View</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="2" column="0">
