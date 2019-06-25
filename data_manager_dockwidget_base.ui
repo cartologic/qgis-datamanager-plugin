@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>268</width>
-    <height>380</height>
+    <width>271</width>
+    <height>419</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -80,7 +80,7 @@
         <item row="0" column="0">
          <widget class="QTreeWidget" name="layersTreeWidget">
           <property name="frameShape">
-           <enum>QFrame::Panel</enum>
+           <enum>QFrame::StyledPanel</enum>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Sunken</enum>
@@ -113,13 +113,13 @@
         <property name="font">
          <font>
           <family>Tahoma</family>
-          <pointsize>12</pointsize>
+          <pointsize>8</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
         <property name="text">
-         <string>Data Manager - Version 0.1</string>
+         <string>Data Manager - Version 0.2</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
@@ -130,18 +130,19 @@
          <rect>
           <x>10</x>
           <y>120</y>
-          <width>101</width>
+          <width>211</width>
           <height>31</height>
          </rect>
         </property>
         <property name="font">
          <font>
           <family>Tahoma</family>
-          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
-         <string>November 2016</string>
+         <string>June 2019</string>
         </property>
        </widget>
        <widget class="QLabel" name="label">
@@ -156,8 +157,11 @@
         <property name="font">
          <font>
           <family>Tahoma</family>
-          <pointsize>10</pointsize>
+          <pointsize>8</pointsize>
          </font>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
