@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- DomainManager
+ DataManager
 								 A QGIS plugin
  This plugin manages Layers, Tables, Joins and Relates in PostgreSQL/PostGIS database
 							  -------------------
@@ -24,6 +24,7 @@ import os
 import psycopg2
 from qgis.core import QgsMessageLog
 
+
 class Pgdb:
     def __init__(self):
         """Constructor."""
@@ -36,7 +37,7 @@ class Pgdb:
         self.dbcon = None
         self.schemata = []
 
-        QgsMessageLog.logMessage('Initializing Pgdb...', 'Domain Manager')
+        QgsMessageLog.logMessage('Initializing Pgdb...', 'Data Manager')
 
     def connect(self):
         """Connect to the database"""
@@ -44,15 +45,13 @@ class Pgdb:
 					host='{1}' \
 					port='{2}' \
 					user='{3}' \
-					password='{4}'".format(self.database, self.host, self.port, self.username,
-                            self.password)
+					password='{4}'".format(self.database, self.host, self.port, self.username, self.password)
 
         try:
             self.dbcon = psycopg2.connect(conn_string)
-            QgsMessageLog.logMessage('Connect to database ' + self.database,
-                                     'Domain Manager')
+            QgsMessageLog.logMessage('Connect to database ' + self.database, 'Data Manager')
         except:
-            print("Unable to connect to database")
+            QgsMessageLog.logMessage('Unable to connect to database ' + self.database, 'Data Manager')
             exit(1)
 
     def check_extension(self):
@@ -74,7 +73,7 @@ class Pgdb:
         sql_file = os.path.join(dir_path, "sql/information_schema_views.sql")
 
         if os.path.exists(sql_file):
-            QgsMessageLog.logMessage("Initializing extension", 'Domain Manager')
+            QgsMessageLog.logMessage("Initializing extension", 'Data Manager')
             cur = self.dbcon.cursor()
             with open(sql_file, "r") as sql:
                 code = sql.read()
@@ -82,10 +81,8 @@ class Pgdb:
                 self.dbcon.commit()
             cur.close()
         else:
-            QgsMessageLog.logMessage("SQL file " + sql_file + " is missing...",
-                                     'Domain Manager')
-            QgsMessageLog.logMessage("Please reinstall the plugin!",
-                                     'Domain Manager')
+            QgsMessageLog.logMessage("SQL file " + sql_file + " is missing...", 'Data Manager')
+            QgsMessageLog.logMessage("Please reinstall the plugin!", 'Data Manager')
 
     def init_schemata(self):
         """Init the database schemata and update its own propery list"""

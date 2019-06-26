@@ -57,10 +57,8 @@ class DataManager:
 
         # initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
-        locale_path = os.path.join(
-            self.plugin_dir,
-            'i18n',
-            'DataManager_{}.qm'.format(locale))
+        locale_path = os.path.join(self.plugin_dir, 'i18n',
+                                   'DataManager_{}.qm'.format(locale))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -76,11 +74,8 @@ class DataManager:
         self.toolbar = self.iface.addToolBar(u'DataManager')
         self.toolbar.setObjectName(u'DataManager')
 
-        #print "** INITIALIZING DataManager"
-
         self.pluginIsActive = False
         self.dockwidget = None
-
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -97,18 +92,16 @@ class DataManager:
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('DataManager', message)
 
-
-    def add_action(
-        self,
-        icon_path,
-        text,
-        callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+    def add_action(self,
+                   icon_path,
+                   text,
+                   callback,
+                   enabled_flag=True,
+                   add_to_menu=True,
+                   add_to_toolbar=True,
+                   status_tip=None,
+                   whats_this=None,
+                   parent=None):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -163,24 +156,20 @@ class DataManager:
             self.toolbar.addAction(action)
 
         if add_to_menu:
-            self.iface.addPluginToMenu(
-                self.menu,
-                action)
+            self.iface.addPluginToMenu(self.menu, action)
 
         self.actions.append(action)
 
         return action
 
-
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         icon_path = ':/plugins/data_manager/icon.png'
-        self.add_action(
-            icon_path,
-            text=self.tr(u'Data Manager'),
-            callback=self.run,
-            parent=self.iface.mainWindow())
+        self.add_action(icon_path,
+                        text=self.tr(u'Data Manager'),
+                        callback=self.run,
+                        parent=self.iface.mainWindow())
 
     #--------------------------------------------------------------------------
 
@@ -200,16 +189,13 @@ class DataManager:
 
         self.pluginIsActive = False
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
 
         #print "** UNLOAD DataManager"
 
         for action in self.actions:
-            self.iface.removePluginMenu(
-                self.tr(u'&Data Manager'),
-                action)
+            self.iface.removePluginMenu(self.tr(u'&Data Manager'), action)
             self.iface.removeToolBarIcon(action)
         # remove the toolbar
         del self.toolbar
@@ -227,12 +213,12 @@ class DataManager:
 
         if (len(keys) == 0):
             QgsMessageLog.logMessage("No database connections found",
-                                     "Data Manager")
+                                     self.pluginName)
             return ()
 
         for key in keys:
             self.dockwidget.connectionsComboBox.addItem(str(key))
-            QgsMessageLog.logMessage(key, "Data Manager")
+            QgsMessageLog.logMessage(key,  self.pluginName)
 
         s.endGroup()
 
@@ -266,7 +252,7 @@ class DataManager:
 
         # check if extension is initialized
         if self.pgdb.check_extension():
-            QgsMessageLog.logMessage("Extension already initialized")
+            QgsMessageLog.logMessage("Extension already initialized", self.pluginName)
         else:
             # if superuser connection initialize extension
             if self.pgdb.dbcon.get_parameter_status("is_superuser") == 'on':
@@ -274,8 +260,7 @@ class DataManager:
             else:
                 mline1 = "Data Manager plugin is not initialized in the database."
                 mline2 = "\nPlease connect as super user or the database owner at least once to initialize."
-                QMessageBox.information(None, "Data Manager",
-                                        mline1 + mline2)
+                QMessageBox.information(None, self.pluginName, mline1 + mline2)
                 return
 
         # initialize schemas and layers tree
@@ -316,9 +301,11 @@ class DataManager:
         else:  #Table
             self.addLayer(schema, layer)
 
+        # Process joined tables
         if self.dockwidget.loadJoinsCheckBox.isChecked():
             self.processJoinedTables(schema, layer)
 
+        # Process related tables
         if self.dockwidget.loadRelatesCheckBox.isChecked():
             self.processRelatedTables(schema, layer)
 
@@ -329,26 +316,26 @@ class DataManager:
         # check if the layer is already in Layers List
         lay = self.getLayerByName(layer)
         if (lay != None):
-            QgsMessageLog.logMessage("Layer is already in Layers List",
-                                        "Data Manager")
+            QgsMessageLog.logMessage(
+                "{} is already in Layers List".format(layer), self.pluginName)
             return ()
 
         sql = ""
         uri = QgsDataSourceUri()
         uri.setConnection(self.pgdb.host, self.pgdb.port, self.pgdb.database,
-                            self.pgdb.username, self.pgdb.password,
-                            QgsDataSourceUri.SslDisable)
+                          self.pgdb.username, self.pgdb.password,
+                          QgsDataSourceUri.SslDisable)
         uri.setDataSource(schema, layer, geom)
         vlayer = QgsVectorLayer(uri.uri(), layer, "postgres")
 
         if vlayer.isValid():
             QgsProject.instance().addMapLayer(vlayer)
         else:
-            QgsMessageLog.logMessage("Layer is not valid!", "Data Manager")
+            QgsMessageLog.logMessage("Layer is not valid!", self.pluginName)
 
     def processRelatedTables(self, schema, layer):
         """Process related tables."""
-        QgsMessageLog.logMessage("Loading Relates ...", "Data Manager")
+        QgsMessageLog.logMessage("Loading Relates ...", self.pluginName)
         rows = self.pgdb.get_related_tables(schema, layer)
 
         for row in rows:
@@ -369,7 +356,7 @@ class DataManager:
 
     def processJoinedTables(self, schema, layer):
         """Process joined tables."""
-        QgsMessageLog.logMessage("Loading Joins ...", "Data Manager")
+        QgsMessageLog.logMessage("Loading Joins ...", self.pluginName)
         rows = self.pgdb.get_joined_tables(schema, layer)
 
         for row in rows:
@@ -398,10 +385,10 @@ class DataManager:
         rel.setName(rel_name)
 
         if rel.isValid():
-            QgsMessageLog.logMessage(rel_name, "Data Manager")
+            QgsMessageLog.logMessage(rel_name, self.pluginName)
             QgsProject.instance().relationManager().addRelation(rel)
         else:
-            QgsMessageLog.logMessage('Relation is NOT valid')
+            QgsMessageLog.logMessage('Relation is NOT valid', self.pluginName)
 
     def addJoin(self, target_layer, target_field, join_layer, join_field):
         """Add join to the layer."""
@@ -458,6 +445,7 @@ class DataManager:
 
         if not self.pluginIsActive:
             self.pluginIsActive = True
+            self.pluginName = "Data Manager"
 
             # dockwidget may not exist if:
             #   first run of plugin
