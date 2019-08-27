@@ -396,7 +396,6 @@ class DataManager:
         join.setJoinFieldName(join_field)
         join.setTargetFieldName(target_field)
         join.setUsingMemoryCache(True)
-        join.setJoinFieldNamesSubset([])
         join.setJoinLayer(join_layer)
 
         target_layer.addJoin(join)

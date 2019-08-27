@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/plugins/data_manager" >
-        <file>icon.png</file>
-    </qresource>
-</RCC>
