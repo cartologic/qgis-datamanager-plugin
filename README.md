@@ -12,7 +12,7 @@ What is different is that the attribute domains are defined and maintained in th
 
 1. Download or clone the plugin
 2. Rename the plugin’s folder to _DataManager_
-3. Copy the plugin's folder in qgis plugins folder: `$HOME/.qgis2/python/plugins/`
+3. Copy the plugin's folder in qgis plugins folder: `[HOME]\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`
 4. Restart QGIS.
 
 From QGIS click the _Plugins_ pull down menu and navigate to the _Manage and Install Plugins_. Search for the _Data Manager_ plugin and activate it using the checkbox.
